@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 import { CText } from "./CText";
 
@@ -37,7 +37,7 @@ export const ModalBG = ({ children, isOpen, Close }) => {
   );
 };
 
-export const ModalBody = ({ children, title, options }) => {
+export const ModalBody = ({ children, title, deleteItem }) => {
   const s = StyleSheet.create({
     container: {
       backgroundColor: "#fff",
@@ -62,35 +62,43 @@ export const ModalBody = ({ children, title, options }) => {
         <CText size={16} weight="700">
           {title}
         </CText>
-        <View>{options && <Options options={options} />}</View>
+        <View>{deleteItem && <DeleteOption deleteItem={deleteItem} />}</View>
       </View>
       <View style={s.body}>{children}</View>
     </View>
   );
 };
 
-const Options = ({ options }) => {
-  const [toggled, setToggled] = useState(false);
+const DeleteOption = ({ deleteItem }) => {
+  const [pressed, setPressed] = useState(false);
+  const delayRef = useRef();
+
+  const Delete = () => {
+    closeTip();
+    deleteItem();
+  };
+
+  const closeTip = () => {
+    setPressed(false);
+    clearTimeout(delayRef.current);
+  };
+  const openTip = () => {
+    if (pressed) return setPressed(false);
+    setPressed(true);
+    delayRef.current = setTimeout(closeTip, 2000);
+  };
   const s = StyleSheet.create({
-    container: {},
-    toggle: {
-      paddingHorizontal: 10,
-      paddingVertical: 3,
-    },
-    dot: {
-      width: 3,
-      height: 3,
-      backgroundColor: "#000",
-      marginBottom: 2,
-    },
-    box: {
+    tooltip: {
       position: "absolute",
-      right: 14,
-      top: 18,
-      borderTopWidth: 1,
-      borderColor: _def.borderColor,
-      backgroundColor: "#000",
-      display: toggled ? "flex" : "none",
+      display: pressed ? "flex" : "none",
+
+      backgroundColor: "red",
+      zIndex: 1,
+      width: 125,
+      height: 38,
+      borderRadius: 10,
+      right: 5,
+      bottom: 20,
       shadowOffset: {
         width: 2,
         height: 3,
@@ -99,54 +107,27 @@ const Options = ({ options }) => {
       shadowRadius: 2,
       elevation: 3,
     },
-    item: {
-      width: 100,
-      height: 40,
-      borderWidth: 1,
-      borderTopWidth: 0,
+    bgTip: {
       backgroundColor: "#fff",
-      borderColor: _def.borderColor,
       justifyContent: "center",
-      alignItems: "center",
-    },
-    overlay: {
-      backgroundColor: "red",
-      position: "absolute",
-      width: Dimensions.get("screen").width,
-      height: Dimensions.get("screen").height,
-      left: 0,
+      borderColor: _def.borderColor,
+      borderWidth: 1,
+      flex: 1,
+      borderRadius: 10,
     },
   });
   return (
     <>
-      <View style={s.container}>
-        <TouchableOpacity
-          activeOpacity={0.9}
-          onPress={() => setToggled(!toggled)}
-        >
-          <View style={s.toggle}>
-            <View style={s.dot}></View>
-            <View style={s.dot}></View>
-            <View style={s.dot}></View>
-          </View>
+      <View style={s.tooltip}>
+        <TouchableOpacity style={s.bgTip} activeOpacity={0.8} onPress={Delete}>
+          <CText size={13} center>
+            Confirm Delete
+          </CText>
         </TouchableOpacity>
-        <View style={s.box}>
-          {options.map(item => (
-            <TouchableOpacity
-              key={item.title}
-              onPress={() => {
-                setToggled(false);
-                item.action();
-              }}
-              activeOpacity={0.8}
-            >
-              <View style={s.item} key={item.title}>
-                <CText size={17}>{item.title}</CText>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </View>
       </View>
+      <TouchableOpacity onPress={openTip}>
+        <CText>s</CText>
+      </TouchableOpacity>
     </>
   );
 };

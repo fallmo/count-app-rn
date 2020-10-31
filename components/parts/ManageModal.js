@@ -8,19 +8,16 @@ import { Context } from "../../context/Context";
 
 export const ManageModal = ({ count, Close }) => {
   const { incrementCount, decrementCount, deleteCount } = useContext(Context);
-  const opt = [
-    {
-      title: "Delete",
-      action: () => {
-        Close();
-        deleteCount(count.id);
-      },
-    },
-  ];
 
   return (
     <ModalBG isOpen={count} Close={Close}>
-      <ModalBody title="Manage Count" options={opt}>
+      <ModalBody
+        title="Manage Count"
+        deleteItem={() => {
+          Close();
+          deleteCount(count.id);
+        }}
+      >
         <View style={s.body}>
           <CText center size={27} style={{ marginBottom: 5 }}>
             {count && count.label}
