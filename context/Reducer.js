@@ -12,8 +12,8 @@ export default (state, action) => {
       const newCount = {
         id: state.list.length + 1,
         ...action.payload,
-        updated: new Date().toLocaleDateString(),
-        created: new Date().toLocaleDateString(),
+        updated: new Date().toLocaleString(),
+        created: new Date().toLocaleString(),
       };
       nState = {
         ...state,
@@ -34,7 +34,7 @@ export default (state, action) => {
         list: state.list.map(count => {
           if (count.id === action.payload) {
             count.count++;
-            count.updated = new Date().toLocaleDateString();
+            count.updated = new Date().toLocaleString();
           }
           return count;
         }),
@@ -47,7 +47,7 @@ export default (state, action) => {
         list: state.list.map(count => {
           if (count.id === action.payload) {
             count.count--;
-            count.updated = new Date().toLocaleDateString();
+            count.updated = new Date().toLocaleString();
           }
           return count;
         }),

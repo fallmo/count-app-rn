@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
+import trash_icon from "../assets/trash.png";
+import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { CText } from "./CText";
 
 import _def from "../theme";
@@ -115,6 +116,10 @@ const DeleteOption = ({ deleteItem }) => {
       flex: 1,
       borderRadius: 10,
     },
+    icon: {
+      width: 12,
+      height: 15,
+    },
   });
   return (
     <>
@@ -126,7 +131,7 @@ const DeleteOption = ({ deleteItem }) => {
         </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={openTip}>
-        <CText>s</CText>
+        <Image source={trash_icon} style={s.icon} />
       </TouchableOpacity>
     </>
   );

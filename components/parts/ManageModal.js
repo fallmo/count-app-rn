@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { ModalBody, ModalBG } from "../Modal";
 import { CText } from "../CText";
 import { Clickable } from "../Button";
@@ -8,7 +8,6 @@ import { Context } from "../../context/Context";
 
 export const ManageModal = ({ count, Close }) => {
   const { incrementCount, decrementCount, deleteCount } = useContext(Context);
-
   return (
     <ModalBG isOpen={count} Close={Close}>
       <ModalBody
@@ -30,11 +29,15 @@ export const ManageModal = ({ count, Close }) => {
           <View style={s.info}>
             <View style={s.row}>
               <CText color={_def.borderColor}>Last Updated:</CText>
-              <CText color={_def.borderColor}>{count && count.updated}</CText>
+              <CText color={_def.borderColor}>
+                {count && showTime(count.updated)}
+              </CText>
             </View>
             <View style={s.row}>
               <CText color={_def.borderColor}>Date Created:</CText>
-              <CText color={_def.borderColor}>{count && count.created}</CText>
+              <CText color={_def.borderColor}>
+                {count && showTime(count.created)}
+              </CText>
             </View>
           </View>
         </View>
@@ -109,3 +112,10 @@ const s = StyleSheet.create({
     justifyContent: "space-between",
   },
 });
+
+const showTime = time => {
+  const today = new Date().toLocaleDateString();
+  const day = time.split(",");
+  if (today === day[0]) return day[1];
+  else return day[0];
+};

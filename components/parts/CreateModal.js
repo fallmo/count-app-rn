@@ -18,7 +18,10 @@ export const CreateModal = ({ isOpen, Close }) => {
 
   const Create = () => {
     if (!count.label || isNaN(count.count) || !count.color) return;
-    createCount(count);
+    createCount({
+      ...count,
+      count: count.count === "" ? 0 : count.count,
+    });
     ClearFields();
     Close();
   };

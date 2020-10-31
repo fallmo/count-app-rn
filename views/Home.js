@@ -25,7 +25,7 @@ function Home() {
       <View style={s.body}>
         <CText weight="600">Active Counts</CText>
         <ScrollView style={s.list}>
-          {list.map(item => (
+          {list.sort(sortByDate).map(item => (
             <Clickable key={item.id} onPress={() => OpenView(item)}>
               <CountItem {...item} />
             </Clickable>
@@ -61,3 +61,11 @@ const s = StyleSheet.create({
     paddingVertical: 5,
   },
 });
+
+const sortByDate = (a, b) => {
+  const aSeconds = Date.parse(a.updated);
+  const bSeconds = Date.parse(b.updated);
+  if (aSeconds < bSeconds) return 1;
+  else if (aSeconds > bSeconds) return -1;
+  else return 0;
+};
