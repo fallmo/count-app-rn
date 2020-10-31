@@ -1,0 +1,6 @@
+module Pods_countdown {
+  umbrella header "Pods-countdown-umbrella.h"
+
+  export *
+  module * { export * }
+}
